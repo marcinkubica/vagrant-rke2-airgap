@@ -1,0 +1,54 @@
+---
+- name: Install epel-release onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name:
+     - epel-release
+  when: inventory_hostname == 'controller'
+  tags: ansible
+
+- name: Install required apps onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name:
+     - ansible
+     - git
+  when: inventory_hostname == 'controller'
+  tags: ansible
+
+- name: Generate ssh key for controller node
+  community.crypto.openssh_keypair:
+    path: ~/.ssh/id_rsa
+    size: 2048
+    comment: "vagrant@controller"
+  when: inventory_hostname == 'controller'
+  tags: ssh
+
+- name: Get controller's public ssh key
+  ansible.builtin.slurp:
+    src: ~/.ssh/id_rsa.pub
+  register: controller_ssh_pub
+  when: inventory_hostname == 'controller'
+  tags: ssh
+
+
+- name: Add controller's ssh pub to rke nodes
+  ansible.posix.authorized_key:
+    user: vagrant
+    state: present
+    key: "{{ hostvars['controller']['controller_ssh_pub']['content'] | b64decode }}"
+  when: inventory_hostname != 'controller'
+  tags: ssh
+
+- name: Setup /etc/hosts names
+  become: true
+  ansible.builtin.template:
+    backup: true
+    src: etc-hosts.j2
+    dest: /etc/hosts
+  tags: etchosts
+

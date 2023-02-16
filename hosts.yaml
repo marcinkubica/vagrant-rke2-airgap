@@ -1,0 +1,27 @@
+all:
+  vars:
+    ansible_user: vagrant
+    ansible_host: 127.0.0.1
+  hosts:
+    controller:
+      ansible_ssh_private_key_file: "./.vagrant/machines/controller/virtualbox/private_key"
+      ansible_port: 60209
+      vm_role: controller
+    master-01:
+      ansible_ssh_private_key_file: "./.vagrant/machines/master-01/virtualbox/private_key"
+      ansible_port: 60210
+      vm_role: server
+    node-01:
+      ansible_ssh_private_key_file: "./.vagrant/machines/node-01/virtualbox/private_key"
+      ansible_port: 60211
+      vm_role: agent
+    node-02:
+      ansible_ssh_private_key_file: "./.vagrant/machines/node-02/virtualbox/private_key"
+      ansible_port: 60212
+      vm_role: agent
+    node-03:
+      ansible_ssh_private_key_file: "./.vagrant/machines/node-03/virtualbox/private_key"
+      ansible_port: 60213
+      vm_role: agent
+
+

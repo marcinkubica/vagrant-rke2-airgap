@@ -1,0 +1,17 @@
+[rke2_servers]
+{% for item in ansible_play_batch %}
+{% if hostvars[item].vm_role == 'server' %}
+{{ item }} node_ip={{ hostvars[item].ansible_eth1.ipv4.address }}
+{% endif %}
+{% endfor %}
+
+[rke2_agents]
+{% for item in ansible_play_batch %}
+{% if hostvars[item].vm_role == 'agent' %}
+{{ item }} node_ip={{ hostvars[item].ansible_eth1.ipv4.address }}
+{% endif %}
+{% endfor %}
+
+[rke2_cluster:children]
+rke2_servers
+rke2_agents

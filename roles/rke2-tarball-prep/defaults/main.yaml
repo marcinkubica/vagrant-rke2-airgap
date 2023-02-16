@@ -1,0 +1,6 @@
+rke2_ansible_repo_url: https://github.com/marcinkubica/rke2-ansible.git
+rke2_ansible_repo_ref: fix-config
+rke2_ansible_repo_tmp: /tmp/rke2-ansible
+rke2_ansible_repo_dst: ./
+
+rke2_version: v1.23.16+rke2r1
