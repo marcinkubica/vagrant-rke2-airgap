@@ -2,6 +2,8 @@
 
 An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com/rancherfederal/rke2-ansible) installation
 
+#### WIP STATUS: accesing issues with full airgap
+
 ## Usage
 
 ```
@@ -23,7 +25,7 @@ NO_TRIGGERS=true vagrant up
 ## TLDR;
 ![](./vagrant.svg)
 
-Vagrant will perform following:
+Vagrant will perform the following:
 - provision VMs as defined in [vagrant.yaml](./vagrant.yaml)
 - execute ansible on your machine:
   - pre-onfigure vagrant VMs
@@ -31,6 +33,16 @@ Vagrant will perform following:
   - generate `my-cluster` inventory for rke2-ansible
 - execute ansible on air-gapped controller machine:
   - install rke2 on all air-gapped cluster VMs
+
+## Accessing RKE2 from your host
+1. An alias to `kubectl` is created on a master server
+    ```
+    alias kubectl='sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml'
+    ```
+
+1. Port 6443 is forwarded by default from master-01 to localhost
+1. RKE2's `/etc/rancher/rke2/rke2.yaml` kubeconfig file is saved to `/tmp/rke2-ansible.yaml` \
+   Using this file is sufficient to connect from localhost with your favourite k8s tool.
 
 ## TODOS:
 1. Support more linux os (currently only centos7 😆 )
