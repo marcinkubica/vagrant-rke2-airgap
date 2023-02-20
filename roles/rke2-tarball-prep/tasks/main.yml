@@ -1,55 +1,6 @@
----
-- name: Pull rancherfederal/rke2-ansible repo to local machine
-  ansible.builtin.git:
-    repo: "{{ rke2_ansible_repo_url }}"
-    dest: "{{ rke2_ansible_repo_tmp }}"
-    version: "{{ rke2_ansible_repo_ref }}"
+- name: Import prep tasks
+  ansible.builtin.import_tasks: prep.yml
   delegate_to: localhost
-  run_once: true
-
-- name: Install rke2-ansible requirements collections
-  ansible.builtin.shell:
-    chdir: "{{ rke2_ansible_repo_tmp }}"
-    cmd: ansible-galaxy collection install -r requirements.yml -p ./collections
-  delegate_to: localhost
-  run_once: true
-
-# TODO: verify checksums for tar.gz/zst
-- name: Download rke2 tarballs from github
-  ansible.builtin.get_url:
-    url: "{{ item }}"
-    dest: "{{ rke2_ansible_repo_tmp }}/tarball_install"
-  loop:
-    - "https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/rke2-images.linux-amd64.tar.zst"
-    - "https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/rke2.linux-amd64.tar.gz"
-  delegate_to: localhost
-  run_once: true
-
-- name: Create folder for 'my-cluster' inventory
-  ansible.builtin.file:
-    path: "{{ rke2_ansible_repo_tmp }}/inventory/my-cluster"
-    state: directory
-  delegate_to: localhost
-  tags: my-cluster
-  run_once: true
-
-# generate inventory
-- name: Generate inventory for vagrant VMs
-  ansible.builtin.template:
-    src: my-cluster-hosts.ini.j2
-    dest: "{{ rke2_ansible_repo_tmp }}/inventory/my-cluster/hosts.ini"
-  delegate_to: localhost
-  tags: my-cluster
-  run_once: true
-
-- name: Upload rke2 repo with tarballs and inventory to the controller
-  ansible.posix.synchronize:
-    src: "{{ rke2_ansible_repo_tmp }}"
-    dest: ./
-    owner: true
-    group: true
-  when: inventory_hostname == 'controller'
-  tags: my-cluster
   run_once: true
 
 - name: Verify controller can do ansible ping to all VMs
@@ -61,4 +12,15 @@
   run_once: true
   register: ping
   failed_when: ping.stderr or ping.rc !=0
+
+
+- name: Upload rke2 repo with tarballs and inventory to the controller
+  ansible.posix.synchronize:
+    src: "{{ rke2_ansible_repo_tmp }}"
+    dest: ./
+    owner: true
+    group: true
+  when: inventory_hostname == 'controller'
+  tags: my-cluster
+  run_once: true
 

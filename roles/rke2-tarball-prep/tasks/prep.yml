@@ -1,0 +1,93 @@
+---
+- name: Pull rancherfederal/rke2-ansible repo to local machine
+  ansible.builtin.git:
+    repo: "{{ rke2_ansible_repo_url }}"
+    dest: "{{ rke2_ansible_repo_tmp }}"
+    version: "{{ rke2_ansible_repo_ref }}"
+    separate_git_dir: "{{ rke2_ansible_repo_tmp }}-git"
+    force: true
+
+- name: Install rke2-ansible requirements collections
+  ansible.builtin.shell:
+    chdir: "{{ rke2_ansible_repo_tmp }}"
+    cmd: ansible-galaxy collection install -r requirements.yml -p ./collections
+
+- name: Download rke2 tarballs checksum file
+  ansible.builtin.get_url:
+    url: https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/sha256sum-amd64.txt
+    dest: "{{ rke2_ansible_repo_tmp }}/tarball_install"
+    mode: '0644'
+  tags: balls
+
+- name: Read checksums
+  set_fact:
+    tarzst_sum: "{{ lookup('file', '{{ rke2_ansible_repo_tmp }}/tarball_install/sha256sum-amd64.txt') | regex_search('.+rke2-images.linux-amd64.tar.zst') | split | first |string }}"
+    targz_sum: "{{ lookup('file', '{{ rke2_ansible_repo_tmp }}/tarball_install/sha256sum-amd64.txt') | regex_search('.+rke2.linux-amd64.tar.gz') | split | first |string }}"
+  tags: balls
+
+
+- name: Check if we already have 'rke2-images.linux-amd64.tar.zst'
+  ansible.builtin.stat:
+    path: "{{ rke2_ansible_repo_tmp }}/tarball_install/rke2-images.linux-amd64.tar.zst"
+    checksum_algorithm: sha256
+  register: tarzst
+  tags: balls
+  changed_when: not tarzst.stat.exists
+
+- name: Verify 'rke2-images.linux-amd64.tar.zst' checksum
+  debug:
+    msg:
+      - "tar.zst : {{ tarzst.stat.checksum }}"
+      - "sum file: {{ tarzst_sum }}"
+  when: tarzst.stat.exists
+  failed_when: tarzst.stat.checksum != tarzst_sum
+  tags: balls
+
+
+- name: Check if we already have 'rke2.linux-amd64.tar.gz'
+  ansible.builtin.stat:
+    path: "{{ rke2_ansible_repo_tmp }}/tarball_install/rke2.linux-amd64.tar.gz"
+    checksum_algorithm: sha256
+  register: targz
+  tags: balls
+  changed_when: not targz.stat.exists
+
+- name: Verify 'rke2-images.linux-amd64.tar.gz' checksum
+  debug:
+    msg:
+      - "tar.zst : {{ targz.stat.checksum }}"
+      - "sum file: {{ targz_sum }}"
+  when: targz.stat.exists
+  failed_when: targz.stat.checksum != targz_sum
+  tags: balls
+
+
+- name: Github  download {{ rke_version }} - 'rke2-images.linux-amd64.tar.zst'
+  ansible.builtin.get_url:
+    url: "https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/rke2-images.linux-amd64.tar.zst"
+    dest: "{{ rke2_ansible_repo_tmp }}/tarball_install"
+    checksum: "sha256:https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/sha256sum-amd64.txt"
+  tags: balls
+  when: not tarzst.stat.exists
+
+- name: Github download {{ rke_version }} - 'rke2.linux-amd64.tar.gz'
+  ansible.builtin.get_url:
+    url: "https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/rke2.linux-amd64.tar.gz"
+    dest: "{{ rke2_ansible_repo_tmp }}/tarball_install"
+    checksum: "sha256:https://github.com/rancher/rke2/releases/download/{{ rke2_version | regex_replace('\\+', '%2B') }}/sha256sum-amd64.txt"
+  tags: balls
+  when: not targz.stat.exists
+
+
+- name: Create folder for 'my-cluster' inventory
+  ansible.builtin.file:
+    path: "{{ rke2_ansible_repo_tmp }}/inventory/my-cluster"
+    state: directory
+  tags: my-cluster
+
+# generate inventory
+- name: Generate inventory for vagrant VMs
+  ansible.builtin.template:
+    src: my-cluster-hosts.ini.j2
+    dest: "{{ rke2_ansible_repo_tmp }}/inventory/my-cluster/hosts.ini"
+  tags: my-cluster
