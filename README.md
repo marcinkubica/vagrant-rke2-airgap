@@ -5,7 +5,13 @@ An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com
 ## Usage
 
 ```
-vagrant up 
+vagrant up
+```
+
+To skip provisioning and just bring up the VMs
+
+```
+NO_TRIGGERS=true vagrant up
 ```
 
 ## Requirements
@@ -26,18 +32,6 @@ Vagrant will perform following:
 - execute ansible on air-gapped controller machine:
   - install rke2 on all air-gapped cluster VMs
 
-
-## Notes
-1. Since there's a [config.yaml bug in rancherfederal/rke2-ansible](https://github.com/rancherfederal/rke2-ansible/issues/138) at present the git repo being pulled is using my rke2-ansible fork
-
-1. Virtualbox on mac by default might not allow you to create required interfaces.\
-   Try creating a following file `/etc/vbox/networks.conf`
-   ```
-   * 10.0.0.0/8 192.168.0.0/16
-   ```
-
-1. There might be funky things going on if you use M1/M2 Apples
-
 ## TODOS:
 1. Support more linux os (currently only centos7 😆 )
 1. Support private repository install method
@@ -54,3 +48,14 @@ rke2-ansible code:
 * vagrant 2.3.4
 * virtualbox 7.04
 * ansible 2.14.1
+
+## Notes
+1. Since there's a [config.yaml bug in rancherfederal/rke2-ansible](https://github.com/rancherfederal/rke2-ansible/issues/138) at present the git repo being pulled is using my rke2-ansible fork
+
+1. Virtualbox on mac by default might not allow you to create required interfaces.\
+   Try creating a following file `/etc/vbox/networks.conf`
+   ```
+   * 10.0.0.0/8 192.168.0.0/16
+   ```
+
+1. There might be funky things going on if you use M1/M2 Apples
