@@ -1,4 +1,5 @@
-airgap: "{{ lookup('ansible.builtin.env', 'ANSIBLE_AIRGAP') | default(true) }}"
+
+airgap: "{{ lookup('ansible.builtin.env', 'ANSIBLE_AIRGAP', default=true ) }}"
 internet_ip_test_addr: 8.8.8.8
 
 packages:
