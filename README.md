@@ -2,7 +2,7 @@
 
 An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com/rancherfederal/rke2-ansible) installation
 
-#### WIP STATUS: accesing issues with full airgap
+#### WIP STATUS: accesing issues with a full airgap
 
 ## Usage
 
@@ -51,8 +51,9 @@ Vagrant will perform the following:
 
 ## TODOS:
 1. Support more linux os (currently only centos7 😆 )
+1. Add docker registry
 1. Support private repository install method
-1. _**This is a Work In Progress**_ and full airgap hasn't been configured yet as I'm finding issues and create PRs to rancherfederal repo
+
 
 ## Issues with airgap found so far needing internet when it shouldn't
 rke2-ansible code:
