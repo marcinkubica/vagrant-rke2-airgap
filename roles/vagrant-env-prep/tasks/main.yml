@@ -27,20 +27,13 @@
     comment: "vagrant@controller"
   when: inventory_hostname == 'controller'
   tags: ssh
-
-- name: Get controller's public ssh key
-  ansible.builtin.slurp:
-    src: ~/.ssh/id_rsa.pub
-  register: controller_ssh_pub
-  when: inventory_hostname == 'controller'
-  tags: ssh
-
+  register: sshkey
 
 - name: Add controller's ssh pub to rke nodes
   ansible.posix.authorized_key:
     user: vagrant
     state: present
-    key: "{{ hostvars['controller']['controller_ssh_pub']['content'] | b64decode }}"
+    key: "{{ hostvars['controller']['sshkey']['public_key'] }} {{ hostvars['controller']['sshkey']['comment'] }}"
   when: inventory_hostname != 'controller'
   tags: ssh
 
