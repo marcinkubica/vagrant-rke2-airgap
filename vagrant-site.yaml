@@ -3,11 +3,11 @@
   hosts: all
   roles:
     - role: vagrant-env-prep
-      tags: vagrant-env-prep
+      tags: vagrant
 
 - name: Prepare RKE2 tarball deployment
   hosts: all
   roles:
     - role: rke2-tarball-prep
-      tags: rke2-tarball-prep
+      tags: rke2
 

@@ -10,10 +10,15 @@ An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com
 vagrant up
 ```
 
-To skip provisioning and just bring up the VMs
+To skip provisioning and just bring up the VMs:
 
 ```
 NO_TRIGGERS=true vagrant up
+```
+
+To skip configuring airgap:
+```
+ANSIBLE_AIRGAP=false vagrant up
 ```
 
 ## Requirements

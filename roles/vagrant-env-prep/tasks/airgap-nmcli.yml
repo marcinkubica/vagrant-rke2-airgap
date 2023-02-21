@@ -1,0 +1,41 @@
+---
+# -- airgap on
+- block:
+  - name: Airgap on | Remove default route
+    shell: ip route del default || true
+    changed_when: false
+
+  - name: Airgap on | Disable default route for eth0
+    community.general.nmcli:
+      type: ethernet
+      conn_name: System eth0
+      gw4_ignore_auto: true
+      state: present
+
+  - name: Airgap on | Confirm no internet access
+    shell: "ping -W1 -c3 {{ internet_ip_test_addr }}"
+    register: ping
+    failed_when: ping.rc == 0
+    changed_when: false
+
+  when: airgap | bool
+
+# -- airgap off
+- block:
+  - name: Airgap off | Enable default route
+    shell: ip route add default via 10.0.2.2 || true
+
+  - name: Airgap off | Enable default route for eth0
+    community.general.nmcli:
+      type: ethernet
+      conn_name: System eth0
+      gw4_ignore_auto: false
+      state: present
+
+  - name: Airgap off | Confirm internet access
+    shell: "ping -W1 -c3 {{ internet_ip_test_addr }}"
+    register: ping
+    failed_when: ping.rc != 0
+    changed_when: false
+
+  when: not airgap | bool

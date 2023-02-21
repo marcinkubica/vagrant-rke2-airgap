@@ -1,0 +1,19 @@
+---
+- name: Install epel-release onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name:
+     - epel-release
+  when: inventory_hostname == 'controller'
+  tags: packages
+
+- name: Install required apps onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name: "{{ packages.controller }}"
+  when: inventory_hostname == 'controller'
+  tags: packages

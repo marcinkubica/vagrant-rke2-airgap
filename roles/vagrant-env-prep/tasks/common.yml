@@ -1,0 +1,34 @@
+---
+- name: Generate ssh key for controller node
+  community.crypto.openssh_keypair:
+    path: ~/.ssh/id_rsa
+    size: 2048
+    comment: "vagrant@controller"
+  when: inventory_hostname == 'controller'
+  tags: ssh
+  register: sshkey
+
+- name: Add controller's ssh pub to rke nodes
+  ansible.posix.authorized_key:
+    user: vagrant
+    state: present
+    key: "{{ hostvars['controller']['sshkey']['public_key'] }} {{ hostvars['controller']['sshkey']['comment'] }}"
+  when: inventory_hostname != 'controller'
+  tags: ssh
+
+- name: Setup /etc/hosts names
+  become: true
+  ansible.builtin.template:
+    backup: true
+    src: etc-hosts.j2
+    dest: /etc/hosts
+  tags: etchosts
+
+- name: Add kubectl alias to master
+  ansible.builtin.lineinfile:
+    path: "$HOME/.bashrc"
+    line: "alias kubectl='sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml'"
+    state: present
+    insertafter: EOF
+  tags: aliases
+  when: vm_role == 'server'
