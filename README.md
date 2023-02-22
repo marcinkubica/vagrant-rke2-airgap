@@ -63,10 +63,12 @@ Vagrant will perform the following:
 ## Notes
 1. Since there's a [config.yaml bug in rancherfederal/rke2-ansible](https://github.com/rancherfederal/rke2-ansible/issues/138) at present the git repo being pulled is using my rke2-ansible fork
 
-1. Virtualbox on mac by default might not allow you to create required interfaces.\
-   Try creating a following file `/etc/vbox/networks.conf`
+1. Virtualbox on OSX by default might not allow you to create required interfaces.\
+   Try creating the following file `/etc/vbox/networks.conf`
    ```
    * 10.0.0.0/8 192.168.0.0/16
    ```
 
 1. There might be funky things going on if you use M1/M2 Apples
+
+1. Completion time: ~22mins (on my laptop 😉) also see [the transcript file](./vagrant.log).
