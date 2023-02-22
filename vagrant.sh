@@ -7,7 +7,7 @@ if [ ! "${NO_TRIGGERS:-}" ]; then
     printf "${pp}# prepping vagrant VMs${nc}\n"
     ansible-playbook vagrant-site.yaml
 
-    printf "${pp}# running rke2-ansible on a controller VM${nc}\n"
+    printf "${pp}# installing rke2-ansible via controller VM${nc}\n"
     vagrant ssh controller -c 'cd ./rke2-ansible && ansible-playbook site.yml -v'
 
     printf "${pp}# saving master-01 kubeconfig to /tmp/rke2-ansible.yaml${nc}\n"
