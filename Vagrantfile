@@ -30,15 +30,15 @@ Vagrant.configure("2") do |config|
       ip: "#{cfg[:ip]}"
 
       vm.vm.network "forwarded_port",
-      protocol: "tcp"
+      protocol: "tcp",
       guest: 22,
-      host: "#{cfg[:ssh_port]}",
+      host: "#{cfg[:ssh_port]}"
 
       if ! "#{cfg[:k8s_port]}".empty?
         vm.vm.network "forwarded_port",
-        protocol: "tcp"
+        protocol: "tcp",
         guest: "#{cfg[:k8s_port]}",
-        host: "#{cfg[:k8s_port_local]}",
+        host: "#{cfg[:k8s_port_local]}"
       end
 
       vm.vm.synced_folder ".", "/vagrant", disabled: true
