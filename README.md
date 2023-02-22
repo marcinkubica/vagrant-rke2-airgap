@@ -1,8 +1,6 @@
-# WIP: vagrant-rke2-airgap
+# vagrant-rke2-airgap
 
 An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com/rancherfederal/rke2-ansible) installation
-
-#### WIP STATUS: accesing issues with a full airgap
 
 ## Usage
 
@@ -13,7 +11,7 @@ vagrant up
 To skip provisioning and just bring up the VMs:
 
 ```
-NO_TRIGGERS=true vagrant up
+VAGRANT_TRIGGER=false vagrant up
 ```
 
 To skip configuring airgap:
@@ -54,11 +52,6 @@ Vagrant will perform the following:
 1. Add docker registry
 1. Support private repository install method
 
-
-## Issues with airgap found so far needing internet when it shouldn't
-rke2-ansible code:
-1. installing yum package lsb-core 
-1. configuring yum rke2 repos via github
 
 ## Stuff used
 

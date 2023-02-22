@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
     config.vm.define hostname do |vm|
 
       vm.vm.box = "centos/7"
+      vm.vm.hostname = hostname
 
       vm.vm.provider :virtualbox do |vb|
         vb.name = hostname
@@ -24,15 +25,25 @@ Vagrant.configure("2") do |config|
         vb.cpus = "#{cfg[:cpus]}"
       end
 
-      vm.vm.network "private_network", ip: "#{cfg[:ip]}"
-      vm.vm.hostname = hostname
-      vm.vm.network "forwarded_port", guest: 22, host: "#{cfg[:ssh_port]}", protocol: "tcp"
+      vm.vm.network "private_network",
+      auto_config: false,
+      ip: "#{cfg[:ip]}"
+
+      vm.vm.network "forwarded_port",
+      protocol: "tcp"
+      guest: 22,
+      host: "#{cfg[:ssh_port]}",
 
       if ! "#{cfg[:k8s_port]}".empty?
-        vm.vm.network "forwarded_port", guest: "#{cfg[:k8s_port]}", host: "#{cfg[:k8s_port_local]}", protocol: "tcp"
+        vm.vm.network "forwarded_port",
+        protocol: "tcp"
+        guest: "#{cfg[:k8s_port]}",
+        host: "#{cfg[:k8s_port_local]}",
       end
 
       vm.vm.synced_folder ".", "/vagrant", disabled: true
+
+      vm.vm.provision "shell", inline: "ip addr add #{cfg[:ip]}/24 dev eth1"
 
     end
   end

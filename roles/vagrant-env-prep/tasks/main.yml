@@ -1,13 +1,19 @@
 ---
 - name: Execute common tasks
-  import_tasks: common.yml
+  ansible.builtin.import_tasks: common.yml
 
-- name: Execute yum installs
-  import_tasks: yum.yml
+- name: RHEL | configure networking
+  ansible.builtin.import_tasks: network-nmcli.yml
+  when: ansible_os_family == "RedHat"
+  tags: network
+  become: true
+
+- name: YUM | execute package installs
+  ansible.builtin.import_tasks: yum.yml
   when: ansible_pkg_mgr == "yum"
 
-- name: Apply RHEL airgap settings
-  import_tasks: airgap-nmcli.yml
+- name: RHEL | apply airgap settings
+  ansible.builtin.import_tasks: airgap-nmcli.yml
   when: ansible_os_family == "RedHat"
   tags: airgap
   become: true

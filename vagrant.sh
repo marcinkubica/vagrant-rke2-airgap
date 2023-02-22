@@ -3,7 +3,10 @@ set -euo pipefail
 pp='\033[0;35m' #purple
 nc='\033[0m'    #no color
 
-if [ ! "${NO_TRIGGERS:-}" ]; then
+if [ "${VAGRANT_TRIGGER:-}" == "false" ]
+  then
+    printf "${pp}VAGRANT_TRIGGER is false. Skipping provisioning.${nc}\n"
+  else
     printf "${pp}# prepping vagrant VMs${nc}\n"
     ansible-playbook vagrant-site.yaml
 
@@ -17,6 +20,4 @@ if [ ! "${NO_TRIGGERS:-}" ]; then
     vagrant ssh master-01 -c 'sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml wait node --all --for condition=ready --timeout=300s'
 
     printf "${pp}## FINISHED ##${nc}\n"
-else
-    printf "${pp}NO_TRIGGERS is set. Skipping provisioning.${nc}\n"
 fi

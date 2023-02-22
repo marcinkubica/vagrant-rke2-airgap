@@ -1,41 +1,111 @@
 ---
+- name: Set short var name for eth1 ip address
+  set_fact:
+    eth1_ip_addr: "{{ hostvars[inventory_hostname].ansible_eth1.ipv4.address }}"
+
+- name: Set var for eth1 gateway
+  set_fact:
+    eth1_gw4_addr: "{{ eth1_ip_addr.split('.')[0] }}.{{ eth1_ip_addr.split('.')[1] }}.{{ eth1_ip_addr.split('.')[2] }}.1"
+
 # -- airgap on
 - block:
-  - name: Airgap on | Remove default route
-    shell: ip route del default || true
-    changed_when: false
-
   - name: Airgap on | Disable default route for eth0
     community.general.nmcli:
       type: ethernet
       conn_name: System eth0
-      gw4_ignore_auto: true
+      never_default4: true
       state: present
 
-  - name: Airgap on | Confirm no internet access
-    shell: "ping -W1 -c3 {{ internet_ip_test_addr }}"
+  - name: Airgap on | Enable default route for eth1
+    community.general.nmcli:
+      type: ethernet
+      conn_name: eth1
+      gw4: "{{ eth1_gw4_addr }}"
+      state: present
+
+  - name: Airgap on | Restart networking
+    ansible.builtin.systemd:
+      name: network
+      state: restarted
+
+  - name: Airgap on | Test no internet access
+    shell: "ping -W1 -c1 {{ internet_ip_test_addr }}"
+    register: first_ping
+    until: first_ping.rc != 0
+    retries: 3
+    delay: 1
+    failed_when: false
+    changed_when: first_ping.rc == 0
+
+  - name: Airgap on | Restart networking again - access to internet still detected
+    ansible.builtin.systemd:
+      name: network
+      state: restarted
+    when: first_ping.changed
+
+  - name: Airgap on | Final test no internet access
+    shell: "ping -W1 -c1 {{ internet_ip_test_addr }}"
+    when: first_ping.changed
+    register: second_ping
+    until: second_ping.rc != 0
+    retries: 3
+    delay: 1
+    failed_when: second_ping.rc == 0
+    changed_when: false
+
+  - name: Airgap on | Confirm eth1 gateway ping
+    shell: "ping -W1 -c3 {{ eth1_gw4_addr }}"
     register: ping
-    failed_when: ping.rc == 0
+    failed_when: ping.rc != 0
     changed_when: false
 
   when: airgap | bool
 
 # -- airgap off
 - block:
-  - name: Airgap off | Enable default route
-    shell: ip route add default via 10.0.2.2 || true
-
   - name: Airgap off | Enable default route for eth0
     community.general.nmcli:
       type: ethernet
       conn_name: System eth0
-      gw4_ignore_auto: false
+      ifname: eth0
+      never_default4: false
       state: present
 
-  - name: Airgap off | Confirm internet access
-    shell: "ping -W1 -c3 {{ internet_ip_test_addr }}"
-    register: ping
-    failed_when: ping.rc != 0
+  - name: Airgap off | Disable default route for eth1
+    community.general.nmcli:
+      type: ethernet
+      conn_name: eth1
+      never_default4: true
+      state: present
+
+  - name: Airgap off | Restart networking
+    ansible.builtin.systemd:
+      name: network
+      state: restarted
+
+  - name: Airgap off | Test for internet access
+    shell: "ping -W1 -c1 {{ internet_ip_test_addr }}"
+    register: first_ping
+    until: first_ping.rc == 0
+    retries: 3
+    delay: 1
+    failed_when:  false
+    changed_when: first_ping.rc != 0
+
+  - name: Airgap off | Restart networking again - no access to internet detected
+    ansible.builtin.systemd:
+      name: network
+      state: restarted
+    when: first_ping.changed
+
+  - name: Airgap off | Final test of internet access
+    shell: "ping -W1 -c1 {{ internet_ip_test_addr }}"
+    when: first_ping.changed
+    register: second_ping
+    until: second_ping.rc == 0
+    retries: 3
+    delay: 1
+    failed_when:  second_ping.rc != 0
     changed_when: false
 
   when: not airgap | bool
