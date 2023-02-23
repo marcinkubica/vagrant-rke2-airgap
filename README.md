@@ -61,6 +61,8 @@ Vagrant will perform the following:
 * ansible 2.14.1
 
 ## Notes
+1. Vagrant trigger is set to execute after last machine defined in [Vagantfile](./Vagrantfile)\
+   Should you choose to provision VMs selectivelly the trigger for [vagrant.sh](./vagrant.sh) not be executed.
 1. Since there's a [config.yaml bug in rancherfederal/rke2-ansible](https://github.com/rancherfederal/rke2-ansible/issues/138) at present the git repo being pulled is using my rke2-ansible fork
 
 1. Virtualbox on OSX by default might not allow you to create required interfaces.\
