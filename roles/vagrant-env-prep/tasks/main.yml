@@ -11,6 +11,13 @@
 - name: YUM | execute package installs
   ansible.builtin.import_tasks: yum.yml
   when: ansible_pkg_mgr == "yum"
+  tags: yum
+
+- name: DNF | execute package installs
+  ansible.builtin.import_tasks: dnf.yml
+  when: ansible_pkg_mgr == "dnf"
+  tags: dnf
+
 
 - name: RHEL | apply airgap settings
   ansible.builtin.import_tasks: airgap-nmcli.yml

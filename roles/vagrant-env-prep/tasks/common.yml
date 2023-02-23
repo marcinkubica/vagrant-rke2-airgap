@@ -16,6 +16,11 @@
   when: inventory_hostname != 'controller'
   tags: ssh
 
+- name: Read IP address from Vagrantfile
+  set_fact:
+    vagrant_ip: "{{ lookup('file', '{{ playbook_dir}}/Vagrantfile') | regex_search(inventory_hostname + '.+') | regex_search('\\b(?:[0-9]{1,3}\\.){3}[0-9]{1,3}\\b')}}"
+  tags: ['airgap','etchosts']
+
 - name: Setup /etc/hosts names
   become: true
   ansible.builtin.template:

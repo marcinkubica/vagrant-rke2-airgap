@@ -43,8 +43,6 @@ Vagrant.configure("2") do |config|
 
       vm.vm.synced_folder ".", "/vagrant", disabled: true
 
-      vm.vm.provision "shell", inline: "ip addr add #{cfg[:ip]}/24 dev eth1"
-
     end
   end
 

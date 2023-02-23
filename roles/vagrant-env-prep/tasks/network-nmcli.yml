@@ -1,12 +1,10 @@
 ---
-# expecting vagrant will provision eth1 IP address we can read from
-
-
-- name: Configure eth1
+- name: NMCLI | Configure eth1
   community.general.nmcli:
     type: ethernet
     ifname: eth1
     conn_name: eth1
-    ip4: "{{ hostvars[inventory_hostname].ansible_eth1.ipv4.address }}/24"
+    ip4: "{{ vagrant_ip }}/24"
     never_default4: true
     state: present
+  notify: ifdownup
