@@ -54,10 +54,10 @@ Vagrant will perform the following:
 * virtualbox 7.04
 * ansible 2.14.1
 
-## Linux tested so far
-* ✅ Centos 7
-* 👎 Centos 8 - WIP: issues installing ansible the epel way
-* 👎 Centos Stream 8
+## Vargant Linux distros tested so far
+* ✅ [Centos 7]([https://app.vagrantup.com/centos/boxes/7)
+* 👎 [Centos 8](https://app.vagrantup.com/centos/boxes/8) - WIP: issues installing ansible the epel way
+* 👎 [Centos Stream 8](https://app.vagrantup.com/centos/boxes/stream8)
    ```
     TASK [rke2_common : TARBALL | Install tar package] *****************************
     fatal: [master-01]: FAILED! => {"changed": false, "msg": "Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: 
