@@ -63,6 +63,8 @@ Vagrant will perform the following:
     fatal: [master-01]: FAILED! => {"changed": false, "msg": "Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: 
     Curl error (28): Timeout was reached for http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=vag [Connection timed out after 30003 milliseconds]", "rc": 1, "results": []}
    ```
+* 👎 [RHEL 7](https://app.vagrantup.com/generic/boxes/rhel7) - WIP: issues installing ansible the epel way
+* 👎 [RHEL 8](https://app.vagrantup.com/generic/boxes/rhel8) - WIP: issues installing ansible the epel way
 
 ## Notes
 1. Vagrant trigger is set to execute after the last machine defined in [Vagantfile](./Vagrantfile)\
