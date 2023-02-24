@@ -42,7 +42,7 @@ Vagrant will perform the following:
    Using this file is sufficient to connect from localhost with your favourite k8s tool.
 
 ## TODOS:
-1. Support more linux os (currently only centos7 😆 )
+1. Support more linux os
 1. Add docker registry
 1. Support private repository install method
 
@@ -53,6 +53,16 @@ Vagrant will perform the following:
 * vagrant 2.3.4
 * virtualbox 7.04
 * ansible 2.14.1
+
+## Linux tested so far
+* ✅ Centos 7
+* 👎 Centos 8 - WIP: issues installing ansible the epel way
+* 👎 Centos Stream 8
+   ```
+    TASK [rke2_common : TARBALL | Install tar package] *****************************
+    fatal: [master-01]: FAILED! => {"changed": false, "msg": "Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: 
+    Curl error (28): Timeout was reached for http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=vag [Connection timed out after 30003 milliseconds]", "rc": 1, "results": []}
+   ```
 
 ## Notes
 1. Vagrant trigger is set to execute after the last machine defined in [Vagantfile](./Vagrantfile)\
