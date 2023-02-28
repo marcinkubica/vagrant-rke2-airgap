@@ -1,0 +1,57 @@
+---
+- name: YUM | Install epel-release onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name:
+     - epel-release
+
+- name: YUM | Install python 3.9 onto controller
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name: python3.9
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version|int > 7
+
+
+- name: PIP3 | Install ansible
+  become: false
+  ansible.builtin.pip:
+    name: ansible
+    executable: pip3
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution != "Rocky"
+    - ansible_distribution_major_version|int > 7
+
+- name: YUM | Install ansible RHEL7
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name: ansible
+  when:
+    - (ansible_distribution == 'CentOS') or (ansible_distribution == 'RedHat')
+    - ansible_distribution_major_version|int == 7
+
+- name: YUM | Install ansible Rocky
+  become: true
+  ansible.builtin.yum:
+    update_cache: true
+    state: latest
+    name: ansible
+  when:
+    - ansible_distribution == "Rocky"
+
+
+- name: Get ansible version
+  ansible.builtin.shell: "ansible --version"
+  register: ansible
+
+- name: Show ansible version
+  debug:
+    msg: "{{ ansible.stdout_lines }}"

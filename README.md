@@ -56,15 +56,14 @@ Vagrant will perform the following:
 
 ## Vargant Linux distros tested so far
 * ✅ [Centos 7]([https://app.vagrantup.com/centos/boxes/7)
-* 👎 [Centos 8](https://app.vagrantup.com/centos/boxes/8) - WIP: issues installing ansible the epel way
-* 👎 [Centos Stream 8](https://app.vagrantup.com/centos/boxes/stream8)
-   ```
-    TASK [rke2_common : TARBALL | Install tar package] *****************************
-    fatal: [master-01]: FAILED! => {"changed": false, "msg": "Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: 
-    Curl error (28): Timeout was reached for http://mirrorlist.centos.org/?release=8-stream&arch=x86_64&repo=AppStream&infra=vag [Connection timed out after 30003 milliseconds]", "rc": 1, "results": []}
-   ```
-* 👎 [RHEL 7](https://app.vagrantup.com/generic/boxes/rhel7) - WIP: issues installing ansible the epel way
-* 👎 [RHEL 8](https://app.vagrantup.com/generic/boxes/rhel8) - WIP: issues installing ansible the epel way
+* ✅ [Centos 8](https://app.vagrantup.com/centos/boxes/8)
+* ✅ [Centos Stream 8](https://app.vagrantup.com/centos/boxes/stream8)
+* ✅ [Rocky Linux 8](https://app.vagrantup.com/generic/boxes/rocky8)
+* 👀 [RHEL 7](https://app.vagrantup.com/generic/boxes/rhel7) - WIP
+* 👀 [RHEL 8](https://app.vagrantup.com/generic/boxes/rhel8) - WIP
+* ❔ SLES 15 - not yet
+* ❔ openSUSE - not yet
+* ❔ Ubuntu - not yet
 
 ## Notes
 1. Vagrant trigger is set to execute after the last machine defined in [Vagantfile](./Vagrantfile)\

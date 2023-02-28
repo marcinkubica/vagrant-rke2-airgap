@@ -16,7 +16,16 @@ Vagrant.configure("2") do |config|
   vms.each_with_index do |(hostname, cfg), index|
     config.vm.define hostname do |vm|
 
-      vm.vm.box = "centos/7"
+
+      vm.vm.box = "generic/rocky8"
+
+      # vm.vm.box = "centos/7"
+      # vm.vm.box = "centos/8"
+      # vm.vm.box = "centos/stream8"
+
+      # vm.vm.box = "generic/rhel7"
+      # vm.vm.box = "generic/rhel8"
+
       vm.vm.hostname = hostname
 
       vm.vm.provider :virtualbox do |vb|

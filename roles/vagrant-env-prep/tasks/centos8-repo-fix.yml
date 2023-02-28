@@ -1,0 +1,23 @@
+---
+- name: Centos 8 - find usual repos
+  find:
+    paths: "/etc/yum.repos.d"
+    patterns: "CentOS-*.repo"
+  register: repos
+  changed_when: false
+
+- name: Centos 8 - silence mirrorlist
+  ansible.builtin.replace:
+    path: "{{ item }}"
+    regexp: '^mirrorlist='
+    replace: '#mirrorlist='
+  loop: "{{ repos.files | map (attribute='path') }}"
+  become: true
+
+- name: Centos 8 - replace repos baseurl
+  ansible.builtin.replace:
+    path: "{{ item }}"
+    regexp: '^#baseurl=http://mirror.centos.org'
+    replace: 'baseurl=http://vault.centos.org'
+  loop: "{{ repos.files | map (attribute='path') }}"
+  become: true

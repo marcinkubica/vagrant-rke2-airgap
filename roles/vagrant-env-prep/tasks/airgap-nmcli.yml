@@ -18,7 +18,9 @@
       conn_name: eth1
       gw4: "{{ eth1_gw4_addr }}"
       state: present
-    notify: ifdownup
+    notify: 
+      - ifdownup
+      - ifdownup Rocky
 
   - meta: flush_handlers
 
@@ -30,7 +32,9 @@
     delay: 1
     failed_when: false
     changed_when: first_ping.rc == 0
-    notify: ifdownup
+    notify:
+      - ifdownup
+      - ifdownup Rocky
 
   - meta: flush_handlers
 
@@ -52,7 +56,9 @@
     changed_when: first_gateway_ping.rc != 0
     retries: 3
     delay: 1
-    notify: ifdownup
+    notify: 
+      - ifdownup
+      - ifdownup Rocky
 
   - meta: flush_handlers
 
@@ -79,7 +85,9 @@
       conn_name: eth1
       never_default4: true
       state: present
-    notify: ifdownup
+    notify: 
+      - ifdownup
+      - ifdownup Rocky
 
   - meta: flush_handlers
 
@@ -91,7 +99,9 @@
     delay: 1
     failed_when:  false
     changed_when: first_ping.rc != 0
-    notify: ifdownup
+    notify: 
+      - ifdownup
+      - ifdownup Rocky
 
   - meta: flush_handlers
 

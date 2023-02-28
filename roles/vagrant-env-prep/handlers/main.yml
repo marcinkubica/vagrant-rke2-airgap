@@ -7,3 +7,10 @@
     ifup eth0 || true
   changed_when: false
   become: true
+  when: ansible_distribution != "Rocky"
+
+- name: ifdownup Rocky
+  shell: nmcli networking off; nmcli networking on;
+  changed_when: false
+  become: true
+  when: ansible_distribution == "Rocky"
