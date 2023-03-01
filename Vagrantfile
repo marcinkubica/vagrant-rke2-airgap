@@ -11,8 +11,6 @@ vms = {
 }
 
 vmbox = ENV['VM_BOX'] || "centos/8"
-puts "Using VM box: " + vmbox
-
 
 Vagrant.configure("2") do |config|
 

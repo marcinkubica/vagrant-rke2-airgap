@@ -20,7 +20,7 @@ echo "# ----------------"
 echo "# vm_box is ${VM_BOX}"
 
 echo "# deleting the log"
-rm -f ${test_name}*
+    rm -f ${test_name}*
 
 echo "# vagrant destroy"
     vagrant destroy -f  |& tee ${test_name}
