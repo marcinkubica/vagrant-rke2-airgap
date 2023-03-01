@@ -1,5 +1,5 @@
 # brind down/up ifaces and discard any errors
-- name: ifdownup
+- name: restart network ifupdown
   shell: |
     ifdown eth1 || true &&
     ifup eth1 || true &&
@@ -7,10 +7,10 @@
     ifup eth0 || true
   changed_when: false
   become: true
-  when: ansible_distribution != "Rocky"
+  when: ansible_distribution == "CentOS"
 
-- name: ifdownup Rocky
+- name: restart network nmcli
   shell: nmcli networking off; nmcli networking on;
   changed_when: false
   become: true
-  when: ansible_distribution == "Rocky"
+  when: ( ansible_distribution == 'Rocky' ) or ( ansible_distribution == 'RedHat')

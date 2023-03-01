@@ -79,3 +79,11 @@ Vagrant will perform the following:
 1. There might be funky things going on if you use M1/M2 Apples
 
 1. Completion time: ~22mins (on my laptop 😉) also see [the transcript file](./vagrant.log).
+
+## Testing
+```
+./vagrant-test.sh
+```
+
+1. Destroy all current VMs
+2. Run and save log to ./testing for all supported Linux distros

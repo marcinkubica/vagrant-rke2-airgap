@@ -10,6 +10,9 @@ vms = {
   "node-03"    => { :ip => "10.0.0.13", :cpus => 4, :mem => 4096, :ssh_port => 60213 },
 }
 
+vmbox = ENV['VM_BOX'] || "centos/8"
+puts "Using VM box: " + vmbox
+
 
 Vagrant.configure("2") do |config|
 
@@ -17,14 +20,7 @@ Vagrant.configure("2") do |config|
     config.vm.define hostname do |vm|
 
 
-      vm.vm.box = "generic/rocky8"
-
-      # vm.vm.box = "centos/7"
-      # vm.vm.box = "centos/8"
-      # vm.vm.box = "centos/stream8"
-
-      # vm.vm.box = "generic/rhel7"
-      # vm.vm.box = "generic/rhel8"
+      vm.vm.box = vmbox
 
       vm.vm.hostname = hostname
 

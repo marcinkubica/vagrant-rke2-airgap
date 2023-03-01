@@ -7,4 +7,6 @@
     ip4: "{{ vagrant_ip }}/24"
     never_default4: true
     state: present
-  notify: ifdownup
+  notify:
+    - restart network ifupdown
+    - restart network nmcli

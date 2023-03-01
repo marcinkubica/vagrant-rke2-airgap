@@ -1,0 +1,7 @@
+# https://unix.stackexchange.com/questions/433046/how-do-i-enable-centos-repositories-on-rhel-red-hat
+[centos]
+name=CentOS-7
+baseurl=http://ftp.heanet.ie/pub/centos/7/os/x86_64/
+enabled=1
+gpgcheck=1
+gpgkey=http://ftp.heanet.ie/pub/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
