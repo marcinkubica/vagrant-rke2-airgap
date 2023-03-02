@@ -10,7 +10,7 @@ vm_boxes=(
     # generic/rhel8
 )
 
-for vm in ${vm_boxes[@]}; do
+for vm in "${vm_boxes[@]}"; do
 
 vbox_name="$( echo ${vm} | tr '/' '-')"
 test_name="./testing/test-${vbox_name}"
@@ -23,17 +23,17 @@ echo "# deleting the log"
     rm -f ${test_name}*
 
 echo "# vagrant destroy"
-    vagrant destroy -f  |& tee ${test_name}
+    vagrant destroy -f  |& tee "${test_name}"
 
 echo "# vagrant up"
-    vagrant up |& tee -a ${test_name}
+    vagrant up |& tee -a "${test_name}"
 
 
 
 if [ $? -ne 0 ]; then
-    mv ${test_name} ${test_name}-failed.log
+    mv "${test_name}" "${test_name}-failed.log"
     else
-    mv ${test_name} ${test_name}-passed.log
+    mv "${test_name}" "${test_name}-passed.log"
 fi
 
 echo "# FINISHED"

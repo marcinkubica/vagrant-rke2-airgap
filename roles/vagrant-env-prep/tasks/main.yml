@@ -8,22 +8,6 @@
   tags: network
   become: true
 
-- name: CentOS 8 | fix repos
-  import_tasks: centos8-repo-fix.yml
-  when:
-    - ansible_distribution == 'CentOS'
-    - ansible_distribution_major_version == '8'
-    - ansible_distribution_release == 'NA' #ensures not to execute on CentOS 8 Stream
-  tags: fixrepos
-
-
-- name: RHEL - install ansible onto controller
-  ansible.builtin.import_tasks: ansible-rhel.yml
-  when:
-    - ansible_os_family == "RedHat"
-    - inventory_hostname == 'controller'
-  tags: ansible
-
 
 - name: RHEL | apply airgap settings
   ansible.builtin.import_tasks: airgap-nmcli.yml

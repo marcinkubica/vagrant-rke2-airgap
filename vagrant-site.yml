@@ -1,4 +1,10 @@
 ---
+- name: Install ansible to the controller VM
+  hosts: controller
+  roles:
+    - role: ansible-asdf
+      tags: ansible-asdf
+
 - name: Prepare vagrant environment
   hosts: all
   roles:

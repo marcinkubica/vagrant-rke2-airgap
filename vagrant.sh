@@ -8,7 +8,7 @@ if [ "${VAGRANT_TRIGGER:-}" == "false" ]
     printf "%bVAGRANT_TRIGGER is false. Skipping provisioning.%b" "${pp}" "${nc}"
   else
     printf "%b# prepping vagrant VMs%b" "${pp}" "${nc}"
-    ansible-playbook vagrant-site.yaml
+    ansible-playbook vagrant-site.yml
 
     printf "%b# installing rke2-ansible via controller VM%b" "${pp}" "${nc}"
     vagrant ssh controller -c 'cd ./rke2-ansible && ansible-playbook site.yml -v'

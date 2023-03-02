@@ -1,0 +1,64 @@
+- name: YUM | RHEL7 add CentOS7 repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: centos
+    description: CenOS7 repo
+    baseurl: http://ftp.heanet.ie/pub/centos/7/os/x86_64/
+    gpgcheck: true
+    gpgkey: http://ftp.heanet.ie/pub/centos/7/os/x86_64/RPM-GPG-KEY-CentOS-7
+  when:
+    - ansible_distribution == 'RedHat'
+    - ansible_distribution_major_version|int == 7
+
+- name: YUM | RHEL8 add CentOS8 Appstream repo
+  become: true
+  ansible.builtin.yum_repository:
+    name: appstream
+    description: CentOS 8 AppStream repo
+    baseurl: http://vault.centos.org/centos/8/AppStream/x86_64/os/
+    gpgcheck: true
+    gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
+  when:
+    - ansible_distribution == 'RedHat'
+    - ansible_distribution_major_version|int == 7
+
+
+- block:
+  - name: Centos 8 - find usual repos
+    find:
+      paths: "/etc/yum.repos.d"
+      patterns: "CentOS-*.repo"
+    register: repos
+    changed_when: false
+
+  - name: Centos 8 - silence mirrorlist
+    ansible.builtin.replace:
+      path: "{{ item }}"
+      regexp: '^mirrorlist='
+      replace: '#mirrorlist='
+    loop: "{{ repos.files | map (attribute='path') }}"
+    become: true
+
+  - name: Centos 8 - replace repos baseurl
+    ansible.builtin.replace:
+      path: "{{ item }}"
+      regexp: '^#baseurl=http://mirror.centos.org'
+      replace: 'baseurl=http://vault.centos.org'
+    loop: "{{ repos.files | map (attribute='path') }}"
+    become: true
+  when:
+    - ansible_distribution == 'CentOS'
+    - ansible_distribution_major_version == '8'
+    - ansible_distribution_release == 'NA' #ensures not to execute on CentOS 8 Stream
+  tags: fixrepos
+
+
+- name: Install git, curl and python3
+  become: true
+  ansible.builtin.yum:
+    name:
+      - git
+      - curl
+      - python3
+    state: present
+

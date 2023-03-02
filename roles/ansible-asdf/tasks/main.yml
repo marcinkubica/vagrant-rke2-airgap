@@ -1,0 +1,6 @@
+- name: PREP | RHEL family
+  import_tasks: prep-rhel.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: ANSIBLE | install
+  import_tasks: ansible-install.yml

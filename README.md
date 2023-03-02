@@ -11,8 +11,8 @@ An attempt to install and play with [Rancher RKE2 air-gapped](https://github.com
 | skip provisioning and only bring up the VMs| `VAGRANT_TRIGGER=false vagrant up`|
 | use box of my choice | `VM_BOX="some/name" vagrant up` |
 | provision without the airgap |`ANSIBLE_AIRGAP=false vagrant up`|
-| disable airgap on existing VMs |`ansible-playbook vagrant-site.yaml -t airgap -e "airgap=off"`|
-| enable airgap back on existing VMs |`ansible-playbook vagrant-site.yaml -t airgap -e "airgap=on"`|
+| disable airgap on existing VMs |`ansible-playbook vagrant-site.yml -t airgap -e "airgap=off"`|
+| enable airgap back on existing VMs |`ansible-playbook vagrant-site.yml -t airgap -e "airgap=on"`|
 
 ## Requirements
 
