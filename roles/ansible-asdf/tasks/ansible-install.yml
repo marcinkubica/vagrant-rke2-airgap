@@ -29,7 +29,7 @@
   ansible.builtin.shell: "asdf install ansible-base || true"
 
 - name: ASDF | test ansible
-  ansible.builtin.shell: "source $HOME/.bashrc && ansible --version"
+  ansible.builtin.shell: "source $HOME/.bashrc && ansible --version | head -n1"
   register: ansible
 
 - name: Show ansible

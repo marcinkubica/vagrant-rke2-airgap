@@ -20,7 +20,7 @@
     gpgkey: https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official
   when:
     - ansible_distribution == 'RedHat'
-    - ansible_distribution_major_version|int == 7
+    - ansible_distribution_major_version|int == 8
 
 
 - block:

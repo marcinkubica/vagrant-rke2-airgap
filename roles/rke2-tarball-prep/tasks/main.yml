@@ -20,5 +20,3 @@
   when: inventory_hostname == 'controller'
   tags: ['my-cluster','ping']
   run_once: true
-  register: ping
-  #failed_when: ping.stderr or ping.rc !=0

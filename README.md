@@ -60,10 +60,8 @@ Vagrant will perform the following:
 * ✅ [Centos 8](https://app.vagrantup.com/centos/boxes/8)
 * ✅ [Centos Stream 8](https://app.vagrantup.com/centos/boxes/stream8)
 * ✅ [Rocky Linux 8](https://app.vagrantup.com/generic/boxes/rocky8)
-* 👀 [RHEL 7](https://app.vagrantup.com/generic/boxes/rhel7) - WIP
-* 👀 [RHEL 8](https://app.vagrantup.com/generic/boxes/rhel8) - WIP
-* ❔ SLES 15 - not yet
-* ❔ openSUSE - not yet
+* ✅ [RHEL 7](https://app.vagrantup.com/generic/boxes/rhel7)
+* ✅ [RHEL 8](https://app.vagrantup.com/generic/boxes/rhel8)
 * ❔ Ubuntu - not yet
 
 ## Notes
@@ -79,7 +77,7 @@ Vagrant will perform the following:
 
 1. There might be funky things going on if you use M1/M2 Apples
 
-1. Completion time: ~22mins (on my laptop 😉) also see [the transcript file](./vagrant.log).
+1. Completion time: ~22mins (on my laptop 😉)
 
 ## Testing
 ```
@@ -87,4 +85,5 @@ Vagrant will perform the following:
 ```
 
 1. Destroy all current VMs
-2. Run and save log to ./testing for all supported Linux distros
+2. Run and save log to [./testing](./testing/) for all supported Linux distros
+3. Completion time for 6 tested distros so far ~2h
